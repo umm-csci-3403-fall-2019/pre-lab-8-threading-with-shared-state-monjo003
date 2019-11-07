@@ -88,7 +88,7 @@ public class ThreadedSearch<T> implements Searcher<T>, Runnable {
 
       for(int i = begin; i < end; i++)
       {
-          if(answer.getAnswer() == false)
+          if(answer.getAnswer() == false )
           {
               if(list.get(i) == target)
               {
