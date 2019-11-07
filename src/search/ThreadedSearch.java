@@ -49,13 +49,61 @@ public class ThreadedSearch<T> implements Searcher<T>, Runnable {
          * threads, wait for them to all terminate, and then return the answer
          * in the shared `Answer` instance.
          */
-        return false;
+
+
+        //return false;
+
+
+
+  Answer result = new Answer();
+
+
+
+    //areay with each a unique space
+    Thread[] threads = new Thread[numThreads];
+    for (int i = 0; i < numThreads; i++) {
+             int begin = (list.size()*i)/numThreads;
+             int end = (list.size()*(i+1))/numThreads;
+             ThreadedSearch<T> threadedSearch = new ThreadedSearch<T>(target, list, begin, end, answer);
+             Thread thread = new Thread(threadedSearch);
+             threads[i] = thread;
+             thread.start();
+         }
+
+        for(int i = 0; i < numThreads; i++)
+        {
+            //Wait on the thread
+            threads[i].join();
+        }
+
+   // out come of all the preformans
+    return result.getAnswer();
+
     }
 
+
     public void run() {
-        // Delete this `throw` when you actually implement this method.
-        throw new UnsupportedOperationException();
-    }
+      // Delete this `throw` when you actually implement this method.
+      //  throw new UnsupportedOperationException();
+
+      for(int i = begin; i < end; i++)
+      {
+          if(answer.getAnswer() == false)
+          {
+              if(list.get(i) == target)
+              {
+                  answer.setAnswer(true);
+              }
+          }
+          else
+          {
+              break;
+          }
+      }
+  }
+
+
+
 
     private class Answer {
         private boolean answer = false;
@@ -77,7 +125,7 @@ public class ThreadedSearch<T> implements Searcher<T>, Runnable {
         // call with any value other than `true`. In general, though, you do
         // need to synchronize update methods like this to avoid race conditions.
         public synchronized void setAnswer(boolean newAnswer) {
-            answer = newAnswer;
+            answer = true;
         }
     }
 
